@@ -11,7 +11,7 @@ function newId() {
 }
 
 export default function MonthlyLedger() {
-  const { token, canEdit } = useAuth()
+  const { canEdit } = useAuth()
   const [year, setYear] = useState(2026)
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [data, setData] = useState(null)
@@ -28,7 +28,7 @@ export default function MonthlyLedger() {
     setLoading(true)
     const path = `data/${year}/${String(month).padStart(2,'0')}.json`
     try {
-      const result = await fetchFile(path, token)
+      const result = await fetchFile(path)
       if (result) { setData(result.data); setSha(result.sha) }
       else { setData({ year, month, incomes: [], expenses: [] }); setSha(null) }
     } finally {
@@ -41,7 +41,7 @@ export default function MonthlyLedger() {
     setSaving(true)
     const path = `data/${year}/${String(month).padStart(2,'0')}.json`
     try {
-      const newSha = await saveFile(path, newData, sha, token, `Update ${year}-${month} ledger`)
+      const newSha = await saveFile(path, newData, sha, `Update ${year}-${month} ledger`)
       setSha(newSha)
       setData(newData)
     } finally {

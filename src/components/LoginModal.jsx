@@ -3,46 +3,37 @@ import { useAuth } from '../contexts/AuthContext'
 
 export default function LoginModal({ onClose }) {
   const { login } = useAuth()
-  const [token, setToken] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault()
-    if (!token.trim()) return
-    setLoading(true)
-    setError('')
-    const ok = await login(token.trim())
-    setLoading(false)
+    const ok = login(password)
     if (ok) {
       onClose()
     } else {
-      setError('토큰이 유효하지 않거나 쓰기 권한이 없습니다.')
+      setError('비밀번호가 올바르지 않습니다.')
+      setPassword('')
     }
   }
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-        <h2 className="text-lg font-bold mb-1">편집 모드 로그인</h2>
-        <p className="text-sm text-gray-500 mb-4">
-          GitHub Personal Access Token을 입력하세요.
-          <br />
-          <span className="text-xs">Settings → Developer settings → Personal access tokens → Fine-grained tokens</span>
-        </p>
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-xs p-6">
+        <h2 className="text-lg font-bold mb-4 text-center">편집 모드</h2>
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
             type="password"
-            className="input"
-            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-            value={token}
-            onChange={e => setToken(e.target.value)}
+            className="input text-center text-xl tracking-widest"
+            placeholder="비밀번호"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             autoFocus
           />
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
           <div className="flex gap-2">
-            <button type="submit" disabled={loading} className="btn-primary flex-1">
-              {loading ? '확인 중...' : '로그인'}
+            <button type="submit" disabled={!password} className="btn-primary flex-1">
+              확인
             </button>
             <button type="button" onClick={onClose} className="btn-secondary">
               취소

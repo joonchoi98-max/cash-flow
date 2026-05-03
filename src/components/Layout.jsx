@@ -5,7 +5,7 @@ import LoginModal from './LoginModal'
 
 const navItems = [
   { to: '/', label: '재무제표', icon: '📊' },
-  { to: '/ledger', label: '가계부', icon: '📒' },
+  { to: '/ledger', label: '월별 가계부', icon: '📒' },
   { to: '/loan', label: '원리금 분석', icon: '🏠' },
 ]
 

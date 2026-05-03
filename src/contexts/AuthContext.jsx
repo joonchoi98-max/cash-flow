@@ -1,44 +1,27 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import { verifyToken } from '../utils/github'
+import { createContext, useContext, useState } from 'react'
 
+const CORRECT_PASSWORD = '7990'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem('gh_token') || '')
-  const [canEdit, setCanEdit] = useState(false)
-  const [checking, setChecking] = useState(false)
+  const [canEdit, setCanEdit] = useState(() => localStorage.getItem('edit_auth') === '1')
 
-  useEffect(() => {
-    if (token) {
-      checkToken(token)
+  function login(password) {
+    if (password === CORRECT_PASSWORD) {
+      setCanEdit(true)
+      localStorage.setItem('edit_auth', '1')
+      return true
     }
-  }, [])
-
-  async function checkToken(t) {
-    setChecking(true)
-    const ok = await verifyToken(t)
-    setCanEdit(ok)
-    setChecking(false)
-    return ok
-  }
-
-  async function login(inputToken) {
-    const ok = await checkToken(inputToken)
-    if (ok) {
-      setToken(inputToken)
-      localStorage.setItem('gh_token', inputToken)
-    }
-    return ok
+    return false
   }
 
   function logout() {
-    setToken('')
     setCanEdit(false)
-    localStorage.removeItem('gh_token')
+    localStorage.removeItem('edit_auth')
   }
 
   return (
-    <AuthContext.Provider value={{ token, canEdit, checking, login, logout }}>
+    <AuthContext.Provider value={{ canEdit, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
