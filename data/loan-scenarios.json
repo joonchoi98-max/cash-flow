@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "id": "1",
+      "name": "주담대 5.4억 시나리오",
+      "createdAt": "2026-04-23",
+      "loans": [
+        { "id": "l1", "name": "주택담보대출", "principal": 540000000, "annualRate": 0.045, "termYears": 30, "startYear": 2026, "type": "annuity" },
+        { "id": "l2", "name": "교직원공제회 2.8천", "principal": 28000000, "annualRate": 0.039, "termYears": 3, "startYear": 2026, "type": "annuity" },
+        { "id": "l3", "name": "교직원공제회 5천", "principal": 49000000, "annualRate": 0.047, "termYears": 3, "startYear": 2026, "type": "annuity" }
+      ],
+      "annualIncomes": [
+        { "year": 2026, "amount": 87299000 },
+        { "year": 2027, "amount": 94367000 },
+        { "year": 2028, "amount": 100930000 },
+        { "year": 2029, "amount": 114335000 },
+        { "year": 2030, "amount": 115135000 },
+        { "year": 2031, "amount": 116691000 },
+        { "year": 2032, "amount": 117393000 },
+        { "year": 2033, "amount": 128057000 }
+      ],
+      "monthlyLivingCost": 295000,
+      "initialEquity": 344358362
+    }
+  ]
+}

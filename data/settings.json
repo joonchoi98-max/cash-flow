@@ -1,0 +1,44 @@
+{
+  "incomeCategories": [
+    { "id": "salary_yj", "label": "용주 세후급여", "person": "용주" },
+    { "id": "bonus_yj", "label": "용주 성과급", "person": "용주" },
+    { "id": "tax_refund_yj", "label": "용주 연말정산", "person": "용주" },
+    { "id": "other_yj", "label": "용주 기타수입", "person": "용주" },
+    { "id": "salary_sm", "label": "성미 세후급여", "person": "성미" },
+    { "id": "bonus_sm", "label": "성미 성과급", "person": "성미" },
+    { "id": "tax_refund_sm", "label": "성미 연말정산", "person": "성미" },
+    { "id": "tutoring_sm", "label": "성미 과외수입", "person": "성미" },
+    { "id": "other_sm", "label": "성미 기타수입", "person": "성미" },
+    { "id": "other", "label": "공동 기타수입", "person": "공동" }
+  ],
+  "expenseCategories": [
+    { "id": "allowance", "label": "용돈", "group": "생활" },
+    { "id": "food", "label": "식비", "group": "생활" },
+    { "id": "dining_out", "label": "외식비", "group": "생활" },
+    { "id": "fixed_telecom", "label": "통신비(고정)", "group": "고정지출" },
+    { "id": "fixed_insurance", "label": "보험료(고정)", "group": "고정지출" },
+    { "id": "fixed_other", "label": "기타 고정비용", "group": "고정지출" },
+    { "id": "rent", "label": "월세", "group": "주거" },
+    { "id": "maintenance", "label": "관리비", "group": "주거" },
+    { "id": "housing_other", "label": "주거기타", "group": "주거" },
+    { "id": "transport", "label": "대중교통", "group": "교통" },
+    { "id": "car", "label": "차량유지비", "group": "교통" },
+    { "id": "medical", "label": "의료비", "group": "건강" },
+    { "id": "education", "label": "자기계발비", "group": "자기계발" },
+    { "id": "family", "label": "가족/경조사", "group": "기타" },
+    { "id": "other", "label": "기타", "group": "기타" }
+  ],
+  "assetCategories": [
+    { "id": "cash_yj", "label": "용주 현금/예금/주식", "type": "asset" },
+    { "id": "cash_sm", "label": "성미 현금/예금/주식", "type": "asset" },
+    { "id": "deposit", "label": "전세금/보증금", "type": "asset" },
+    { "id": "real_estate", "label": "부동산", "type": "asset" },
+    { "id": "other_asset", "label": "기타 자산", "type": "asset" }
+  ],
+  "liabilityCategories": [
+    { "id": "mortgage", "label": "주택담보대출", "type": "liability" },
+    { "id": "teachers_union_1", "label": "교직원공제회 (2.8천)", "type": "liability" },
+    { "id": "teachers_union_2", "label": "교직원공제회 (5천)", "type": "liability" },
+    { "id": "other_loan", "label": "기타 대출", "type": "liability" }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "year": 2026,
+  "assets": [
+    { "categoryId": "cash_yj", "amount": 55549162, "note": "현금, 주식, 달러 등" },
+    { "categoryId": "cash_sm", "amount": 149980657, "note": "현금, 주식, 달러 등" },
+    { "categoryId": "deposit", "amount": 120000000, "note": "전세금" }
+  ],
+  "liabilities": []
+}
