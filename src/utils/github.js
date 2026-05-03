@@ -12,19 +12,25 @@ function getWriteHeaders(token) {
   }
 }
 
+// 읽기: raw URL 사용 (API 제한 없음, 빠름)
 export async function fetchFile(path) {
   const res = await fetch(
-    `${BASE_URL}/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`,
-    { headers: { Accept: 'application/vnd.github+json' } }
+    `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${path}?t=${Date.now()}`
   )
   if (res.status === 404) return null
-  if (!res.ok) throw new Error(`GitHub API error: ${res.status}`)
+  if (!res.ok) throw new Error(`파일 로딩 실패 (${res.status})`)
   const data = await res.json()
-  // UTF-8 디코딩 (한글 깨짐 방지)
-  const bytes = atob(data.content.replace(/\n/g, ''))
-  const uint8 = new Uint8Array([...bytes].map(c => c.charCodeAt(0)))
-  const content = new TextDecoder('utf-8').decode(uint8)
-  return { data: JSON.parse(content), sha: data.sha }
+  return { data, sha: null } // sha는 저장 시 자동으로 가져옴
+}
+
+// SHA 조회 (저장 직전에만 호출)
+async function fetchSha(path, token) {
+  const res = await fetch(
+    `${BASE_URL}/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`,
+    { headers: getWriteHeaders(token) }
+  )
+  if (!res.ok) return null
+  return (await res.json()).sha || null
 }
 
 export async function saveFile(path, content, sha, token, message) {
@@ -32,8 +38,11 @@ export async function saveFile(path, content, sha, token, message) {
   const bytes = new TextEncoder().encode(json)
   const b64 = btoa(String.fromCharCode(...bytes))
 
+  // sha 없으면 저장 직전에 가져옴
+  const resolvedSha = sha || await fetchSha(path, token)
+
   const body = { message: message || `Update ${path}`, content: b64, branch: BRANCH }
-  if (sha) body.sha = sha
+  if (resolvedSha) body.sha = resolvedSha
 
   const res = await fetch(
     `${BASE_URL}/repos/${OWNER}/${REPO}/contents/${path}`,
@@ -43,8 +52,7 @@ export async function saveFile(path, content, sha, token, message) {
     const err = await res.json()
     throw new Error(err.message || `GitHub API error: ${res.status}`)
   }
-  const result = await res.json()
-  return result.content.sha
+  return (await res.json()).content.sha
 }
 
 export async function verifyWriteToken(token) {
