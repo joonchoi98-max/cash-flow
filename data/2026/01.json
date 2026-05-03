@@ -1,0 +1,35 @@
+{
+  "year": 2026,
+  "month": 1,
+  "incomes": [
+    { "id": "1", "categoryId": "salary_yj", "amount": 3130000, "note": "" },
+    { "id": "2", "categoryId": "other_yj", "amount": 420000, "note": "구조실포상금" },
+    { "id": "3", "categoryId": "salary_sm", "amount": 2959660, "note": "" },
+    { "id": "4", "categoryId": "other", "amount": 1046100, "note": "비행기환불" },
+    { "id": "5", "categoryId": "other", "amount": 1700000, "note": "비행기환불" },
+    { "id": "6", "categoryId": "other", "amount": 300000, "note": "폰 판매" }
+  ],
+  "expenses": [
+    { "id": "1", "categoryId": "allowance", "amount": 800000, "note": "성미, 용주 용돈" },
+    { "id": "2", "categoryId": "fixed_telecom", "amount": 97110, "note": "용주 핸드폰요금" },
+    { "id": "3", "categoryId": "fixed_insurance", "amount": 34020, "note": "용주 우체국실비보험" },
+    { "id": "4", "categoryId": "family", "amount": 50000, "note": "성미 가족 회비" },
+    { "id": "5", "categoryId": "fixed_telecom", "amount": 81890, "note": "성미 핸드폰, LG인터넷, TV" },
+    { "id": "6", "categoryId": "education", "amount": 10000, "note": "중급회계 2차 연습서" },
+    { "id": "7", "categoryId": "food", "amount": 35100, "note": "인호 김치찜 고기" },
+    { "id": "8", "categoryId": "maintenance", "amount": 232140, "note": "12월 도시가스세" },
+    { "id": "9", "categoryId": "other", "amount": 200000, "note": "할머니 방한 용품" },
+    { "id": "10", "categoryId": "food", "amount": 26600, "note": "문어, 버터, 시금치" },
+    { "id": "11", "categoryId": "maintenance", "amount": 29790, "note": "전기요금" },
+    { "id": "12", "categoryId": "other", "amount": 38600, "note": "인감도장 구매" },
+    { "id": "13", "categoryId": "family", "amount": 100000, "note": "산은조의금-한연진" },
+    { "id": "14", "categoryId": "maintenance", "amount": 28320, "note": "수도세" },
+    { "id": "15", "categoryId": "fixed_insurance", "amount": 57382, "note": "성미 보험료" },
+    { "id": "16", "categoryId": "dining_out", "amount": 78000, "note": "포장마차 외식" },
+    { "id": "17", "categoryId": "dining_out", "amount": 27500, "note": "가족 모임 카페" },
+    { "id": "18", "categoryId": "other", "amount": 646220, "note": "카드값" },
+    { "id": "19", "categoryId": "other", "amount": 7500, "note": "순대, 튀김" },
+    { "id": "20", "categoryId": "other", "amount": 29000, "note": "ChatGPT 결제" },
+    { "id": "21", "categoryId": "rent", "amount": 20000, "note": "1월 월세" }
+  ]
+}
