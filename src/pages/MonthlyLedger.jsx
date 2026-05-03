@@ -15,21 +15,28 @@ export default function MonthlyLedger() {
   const [year, setYear] = useState(2026)
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [data, setData] = useState(null)
-  const [sha, setSha] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState(null)
   const [error, setError] = useState(null)
+  const shaRef = useRef(null) // sha를 ref로 관리 (render 불필요)
 
   useEffect(() => { load() }, [year, month])
 
   async function load() {
     setLoading(true)
     setError(null)
+    setSaveError(null)
     const path = `data/${year}/${String(month).padStart(2, '0')}.json`
     try {
       const result = await fetchFile(path)
-      if (result) { setData(result.data); setSha(result.sha) }
-      else { setData({ year, month, incomes: [], expenses: [] }); setSha(null) }
+      if (result) {
+        setData(result.data)
+        shaRef.current = result.sha
+      } else {
+        setData({ year, month, incomes: [], expenses: [] })
+        shaRef.current = null
+      }
     } catch (e) {
       setError(e.message || '데이터를 불러오지 못했습니다.')
     } finally {
@@ -39,38 +46,49 @@ export default function MonthlyLedger() {
 
   async function persist(newData) {
     if (!canEdit) return
+    // 낙관적 업데이트 — 즉시 화면에 반영
+    setData(newData)
+    setSaveError(null)
     setSaving(true)
-    const path = `data/${year}/${String(month).padStart(2, '00')}.json`
+    const path = `data/${year}/${String(month).padStart(2, '0')}.json`
     try {
       const token = await requireToken()
-      const newSha = await saveFile(path, newData, sha, token, `Update ${year}-${month} ledger`)
-      setSha(newSha)
-      setData(newData)
-    } catch {
-      // cancelled
+      const newSha = await saveFile(path, newData, shaRef.current, token, `Update ${year}-${month} ledger`)
+      shaRef.current = newSha
+    } catch (e) {
+      if (e?.message !== 'cancelled') {
+        setSaveError('저장 실패: ' + (e?.message || '다시 시도해주세요'))
+      }
     } finally {
       setSaving(false)
     }
   }
 
   function addItem(type, item) {
-    const newData = { ...data }
-    if (type === 'income') newData.incomes = [...(data.incomes || []), { id: newId(), ...item }]
-    else newData.expenses = [...(data.expenses || []), { id: newId(), ...item }]
+    const newItem = { id: newId(), ...item }
+    const newData = {
+      ...data,
+      incomes: type === 'income' ? [...(data.incomes || []), newItem] : data.incomes || [],
+      expenses: type === 'expense' ? [...(data.expenses || []), newItem] : data.expenses || [],
+    }
     persist(newData)
   }
 
   function deleteItem(type, id) {
-    const newData = { ...data }
-    if (type === 'income') newData.incomes = data.incomes.filter(i => i.id !== id)
-    else newData.expenses = data.expenses.filter(i => i.id !== id)
+    const newData = {
+      ...data,
+      incomes: type === 'income' ? data.incomes.filter(i => i.id !== id) : data.incomes,
+      expenses: type === 'expense' ? data.expenses.filter(i => i.id !== id) : data.expenses,
+    }
     persist(newData)
   }
 
   function updateItem(type, id, fields) {
-    const newData = { ...data }
-    if (type === 'income') newData.incomes = data.incomes.map(i => i.id === id ? { ...i, ...fields } : i)
-    else newData.expenses = data.expenses.map(i => i.id === id ? { ...i, ...fields } : i)
+    const newData = {
+      ...data,
+      incomes: type === 'income' ? data.incomes.map(i => i.id === id ? { ...i, ...fields } : i) : data.incomes,
+      expenses: type === 'expense' ? data.expenses.map(i => i.id === id ? { ...i, ...fields } : i) : data.expenses,
+    }
     persist(newData)
   }
 
@@ -79,19 +97,51 @@ export default function MonthlyLedger() {
   const ni = totalIncome - totalExpense
 
   return (
-    <div className="space-y-4 pb-20 sm:pb-4">
-      {/* Header */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <h1 className="text-xl font-bold">월별 가계부</h1>
-        <div className="flex gap-2 ml-auto">
-          <select value={year} onChange={e => setYear(Number(e.target.value))} className="input w-24 py-1.5 text-sm">
-            {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
-          </select>
-          <select value={month} onChange={e => setMonth(Number(e.target.value))} className="input w-20 py-1.5 text-sm">
-            {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
-          </select>
+    <div className="space-y-3 pb-20 sm:pb-4">
+      {/* Header: 제목 | 월 탭 | 연도 */}
+      <div className="flex items-center gap-2">
+        <h1 className="text-lg font-bold shrink-0">월별 가계부</h1>
+
+        {/* 월 탭 — 가로 스크롤 */}
+        <div className="flex-1 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-1 min-w-max">
+            {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+              <button
+                key={m}
+                onClick={() => setMonth(m)}
+                className={`px-2.5 py-1 rounded-lg text-sm font-medium transition-colors shrink-0 ${
+                  month === m
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                }`}
+              >
+                {m}월
+              </button>
+            ))}
+          </div>
         </div>
+
+        <select
+          value={year}
+          onChange={e => setYear(Number(e.target.value))}
+          className="input w-24 py-1.5 text-sm shrink-0"
+        >
+          {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
+        </select>
       </div>
+
+      {/* 저장 상태 */}
+      {saving && (
+        <div className="text-xs text-center text-primary-500 bg-primary-50 rounded-lg py-1.5">
+          GitHub에 저장 중...
+        </div>
+      )}
+      {saveError && (
+        <div className="text-xs text-center text-red-500 bg-red-50 rounded-lg py-1.5 flex items-center justify-center gap-2">
+          {saveError}
+          <button onClick={() => setSaveError(null)} className="underline">닫기</button>
+        </div>
+      )}
 
       {/* NI 요약 */}
       <div className="grid grid-cols-3 gap-2">
@@ -121,9 +171,7 @@ export default function MonthlyLedger() {
           <button onClick={load} className="btn-primary text-sm">다시 시도</button>
         </div>
       ) : (
-        /* 3분할 레이아웃 */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* 수입 */}
           <LedgerColumn
             title="수입"
             accentColor="emerald"
@@ -136,8 +184,6 @@ export default function MonthlyLedger() {
             onDelete={id => deleteItem('income', id)}
             onUpdate={(id, fields) => updateItem('income', id, fields)}
           />
-
-          {/* 지출 */}
           <LedgerColumn
             title="지출"
             accentColor="red"
@@ -150,8 +196,6 @@ export default function MonthlyLedger() {
             onDelete={id => deleteItem('expense', id)}
             onUpdate={(id, fields) => updateItem('expense', id, fields)}
           />
-
-          {/* 집계 */}
           <SummaryColumn
             incomes={data?.incomes || []}
             expenses={data?.expenses || []}
@@ -174,8 +218,9 @@ function LedgerColumn({ title, accentColor, items, categories, type, canEdit, sa
   const isIncome = type === 'income'
   const textColor = isIncome ? 'text-emerald-600' : 'text-red-500'
   const borderColor = isIncome ? 'border-emerald-400' : 'border-red-400'
-  const bgAdd = isIncome ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'
-  const btnAdd = isIncome ? 'border-emerald-200 text-emerald-500 hover:bg-emerald-50' : 'border-red-200 text-red-400 hover:bg-red-50'
+  const btnAdd = isIncome
+    ? 'border-emerald-200 text-emerald-500 hover:bg-emerald-50'
+    : 'border-red-200 text-red-400 hover:bg-red-50'
 
   function handleAddSubmit(e) {
     e.preventDefault()
@@ -188,24 +233,21 @@ function LedgerColumn({ title, accentColor, items, categories, type, canEdit, sa
   const total = items.reduce((s, i) => s + i.amount, 0)
 
   return (
-    <div className="card flex flex-col min-h-0">
-      {/* 컬럼 헤더 */}
+    <div className="card flex flex-col">
       <div className={`flex items-center justify-between pb-2 mb-2 border-b-2 ${borderColor}`}>
         <h3 className={`font-bold ${textColor}`}>{title}</h3>
         <span className={`text-sm font-semibold ${textColor}`}>{formatWon(total)}</span>
       </div>
 
-      {/* 항목 테이블 헤더 */}
       <div className="grid grid-cols-[1fr_auto_auto] gap-1 text-xs text-gray-400 px-1 mb-1">
         <span>항목</span>
         <span className="text-right w-24">금액</span>
         {canEdit && <span className="w-8" />}
       </div>
 
-      {/* 항목 목록 */}
-      <div className="flex-1 space-y-0.5 overflow-y-auto max-h-96">
+      <div className="space-y-0.5">
         {items.length === 0 && !addOpen && (
-          <p className="text-center text-gray-300 text-sm py-6">항목 없음</p>
+          <p className="text-center text-gray-300 text-sm py-4">항목 없음</p>
         )}
         {items.map(item => {
           const cat = categories.find(c => c.id === item.categoryId)
@@ -239,14 +281,16 @@ function LedgerColumn({ title, accentColor, items, categories, type, canEdit, sa
         })}
       </div>
 
-      {/* 추가 폼 */}
       {canEdit && (
         addOpen ? (
           <form onSubmit={handleAddSubmit} className={`mt-2 pt-2 border-t border-dashed ${isIncome ? 'border-emerald-200' : 'border-red-200'} space-y-1.5`}>
             <select
               className="input text-sm py-1.5"
               value={addForm.categoryId}
-              onChange={e => { setAddForm(v => ({ ...v, categoryId: e.target.value })); setTimeout(() => amountRef.current?.focus(), 50) }}
+              onChange={e => {
+                setAddForm(v => ({ ...v, categoryId: e.target.value }))
+                setTimeout(() => amountRef.current?.focus(), 50)
+              }}
               autoFocus
             >
               <option value="">카테고리 선택</option>
@@ -272,10 +316,10 @@ function LedgerColumn({ title, accentColor, items, categories, type, canEdit, sa
             <div className="flex gap-1">
               <button
                 type="submit"
-                disabled={saving || !addForm.categoryId || !addForm.amount}
+                disabled={!addForm.categoryId || !addForm.amount}
                 className="btn-primary flex-1 text-sm py-1.5"
               >
-                {saving ? '저장 중...' : '추가'}
+                추가
               </button>
               <button type="button" onClick={() => setAddOpen(false)} className="btn-secondary text-sm py-1.5 px-3">취소</button>
             </div>
@@ -331,17 +375,15 @@ function SummaryColumn({ incomes, expenses, totalIncome, totalExpense, ni }) {
 
   return (
     <div className="card space-y-4">
-      <div className={`pb-2 border-b-2 border-gray-300`}>
+      <div className="pb-2 border-b-2 border-gray-300">
         <h3 className="font-bold text-gray-700">집계</h3>
       </div>
 
-      {/* 순이익 */}
       <div className={`rounded-lg p-3 ${ni >= 0 ? 'bg-emerald-50' : 'bg-red-50'}`}>
         <p className={`text-xs font-medium mb-1 ${ni >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>당기순이익</p>
         <p className={`text-xl font-bold ${ni >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>{formatWon(ni)}</p>
       </div>
 
-      {/* 수입 인별 */}
       <div>
         <p className="text-xs font-semibold text-gray-400 mb-1.5">수입 인별</p>
         {Object.entries(incomeByPerson).map(([person, amt]) => (
@@ -353,7 +395,6 @@ function SummaryColumn({ incomes, expenses, totalIncome, totalExpense, ni }) {
         {Object.keys(incomeByPerson).length === 0 && <p className="text-xs text-gray-300">-</p>}
       </div>
 
-      {/* 지출 그룹별 */}
       <div>
         <p className="text-xs font-semibold text-gray-400 mb-1.5">지출 항목별</p>
         {Object.entries(expenseByGroup).sort((a, b) => b[1] - a[1]).map(([group, amt]) => (
