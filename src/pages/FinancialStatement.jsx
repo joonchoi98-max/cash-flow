@@ -5,6 +5,7 @@ import { formatWon } from '../utils/format'
 import settings from '../../data/settings.json'
 
 const YEARS = [2025, 2026, 2027]
+const CURRENT_MONTH = new Date().getMonth() + 1
 
 export default function FinancialStatement() {
   const { canEdit, requireToken } = useAuth()
@@ -13,29 +14,39 @@ export default function FinancialStatement() {
   const [bsSha, setBsSha] = useState(null)
   const [monthlyData, setMonthlyData] = useState([])
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState('overview') // 'overview' | 'edit'
+  const [error, setError] = useState(null)
+  const [tab, setTab] = useState('overview')
 
   useEffect(() => { load() }, [year])
 
   async function load() {
     setLoading(true)
+    setError(null)
     try {
-      const bsResult = await fetchFile(`data/${year}/balance-sheet.json`)
+      // 재무상태표 + 해당 연도 월별 데이터 병렬 로드
+      const maxMonth = year === new Date().getFullYear() ? CURRENT_MONTH : 12
+      const paths = [
+        `data/${year}/balance-sheet.json`,
+        ...Array.from({ length: maxMonth }, (_, i) =>
+          `data/${year}/${String(i + 1).padStart(2, '0')}.json`
+        ),
+      ]
+      const results = await Promise.all(paths.map(p => fetchFile(p)))
+
+      const bsResult = results[0]
       if (bsResult) { setBs(bsResult.data); setBsSha(bsResult.sha) }
       else setBs({ year, assets: [], liabilities: [] })
 
-      const monthly = []
-      for (let m = 1; m <= 12; m++) {
-        const r = await fetchFile(`data/${year}/${String(m).padStart(2, '0')}.json`)
-        if (r) {
-          const totalIncome = r.data.incomes.reduce((s, i) => s + i.amount, 0)
-          const totalExpense = r.data.expenses.reduce((s, e) => s + e.amount, 0)
-          monthly.push({ month: m, income: totalIncome, expense: totalExpense, ni: totalIncome - totalExpense })
-        } else {
-          monthly.push({ month: m, income: null, expense: null, ni: null })
-        }
-      }
+      const monthly = Array.from({ length: 12 }, (_, i) => {
+        const r = results[i + 1]
+        if (!r) return { month: i + 1, income: null, expense: null, ni: null }
+        const totalIncome = r.data.incomes.reduce((s, x) => s + x.amount, 0)
+        const totalExpense = r.data.expenses.reduce((s, x) => s + x.amount, 0)
+        return { month: i + 1, income: totalIncome, expense: totalExpense, ni: totalIncome - totalExpense }
+      })
       setMonthlyData(monthly)
+    } catch (e) {
+      setError(e.message || '데이터를 불러오지 못했습니다.')
     } finally {
       setLoading(false)
     }
@@ -76,7 +87,16 @@ export default function FinancialStatement() {
       </div>
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400">불러오는 중...</div>
+        <div className="text-center py-16 text-gray-400">
+          <div className="inline-block w-6 h-6 border-2 border-gray-300 border-t-primary-500 rounded-full animate-spin mb-3" />
+          <p>데이터 불러오는 중...</p>
+        </div>
+      ) : error ? (
+        <div className="card text-center py-10 text-red-500">
+          <p className="font-medium mb-2">데이터 로딩 실패</p>
+          <p className="text-sm text-gray-500 mb-4">{error}</p>
+          <button onClick={load} className="btn-primary text-sm">다시 시도</button>
+        </div>
       ) : tab === 'overview' ? (
         <OverviewTab
           year={year}

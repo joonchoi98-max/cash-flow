@@ -18,19 +18,23 @@ export default function MonthlyLedger() {
   const [sha, setSha] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [tab, setTab] = useState('income') // 'income' | 'expense' | 'summary'
-  const [addForm, setAddForm] = useState(null) // { type: 'income'|'expense', categoryId, amount, note }
+  const [error, setError] = useState(null)
+  const [tab, setTab] = useState('income')
+  const [addForm, setAddForm] = useState(null)
   const [editId, setEditId] = useState(null)
 
   useEffect(() => { load() }, [year, month])
 
   async function load() {
     setLoading(true)
+    setError(null)
     const path = `data/${year}/${String(month).padStart(2,'0')}.json`
     try {
       const result = await fetchFile(path)
       if (result) { setData(result.data); setSha(result.sha) }
       else { setData({ year, month, incomes: [], expenses: [] }); setSha(null) }
+    } catch (e) {
+      setError(e.message || '데이터를 불러오지 못했습니다.')
     } finally {
       setLoading(false)
     }
@@ -137,7 +141,16 @@ export default function MonthlyLedger() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-400">불러오는 중...</div>
+        <div className="text-center py-12 text-gray-400">
+          <div className="inline-block w-6 h-6 border-2 border-gray-300 border-t-primary-500 rounded-full animate-spin mb-2" />
+          <p>불러오는 중...</p>
+        </div>
+      ) : error ? (
+        <div className="card text-center py-10 text-red-500">
+          <p className="font-medium mb-2">데이터 로딩 실패</p>
+          <p className="text-sm text-gray-500 mb-4">{error}</p>
+          <button onClick={load} className="btn-primary text-sm">다시 시도</button>
+        </div>
       ) : (
         <>
           {tab === 'income' && (
