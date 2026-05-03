@@ -21,7 +21,7 @@ const DEFAULT_SCENARIO = {
 }
 
 export default function LoanAnalysis() {
-  const { canEdit } = useAuth()
+  const { canEdit, requireToken } = useAuth()
   const [scenarios, setScenarios] = useState([])
   const [sha, setSha] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -49,9 +49,12 @@ export default function LoanAnalysis() {
   async function persist(newScenarios) {
     setSaving(true)
     try {
-      const newSha = await saveFile('data/loan-scenarios.json', { scenarios: newScenarios }, sha, 'Update loan scenarios')
+      const token = await requireToken()
+      const newSha = await saveFile('data/loan-scenarios.json', { scenarios: newScenarios }, sha, token, 'Update loan scenarios')
       setSha(newSha)
       setScenarios(newScenarios)
+    } catch {
+      // cancelled
     } finally {
       setSaving(false)
     }

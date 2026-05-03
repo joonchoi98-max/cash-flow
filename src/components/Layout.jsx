@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useState } from 'react'
 import LoginModal from './LoginModal'
+import TokenModal from './TokenModal'
 
 const navItems = [
   { to: '/', label: '재무제표', icon: '📊' },
@@ -10,7 +11,7 @@ const navItems = [
 ]
 
 export default function Layout() {
-  const { canEdit, logout } = useAuth()
+  const { canEdit, logout, tokenPromise } = useAuth()
   const [showLogin, setShowLogin] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -116,6 +117,7 @@ export default function Layout() {
       <div className="sm:hidden h-16" />
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+      {tokenPromise && <TokenModal />}
     </div>
   )
 }

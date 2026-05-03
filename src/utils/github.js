@@ -2,11 +2,10 @@ const OWNER = 'joonchoi98-max'
 const REPO = 'cash-flow'
 const BRANCH = 'main'
 const BASE_URL = 'https://api.github.com'
-const WRITE_TOKEN = import.meta.env.VITE_GITHUB_TOKEN || ''
 
-function getWriteHeaders() {
+function getWriteHeaders(token) {
   return {
-    Authorization: `Bearer ${WRITE_TOKEN}`,
+    Authorization: `Bearer ${token}`,
     Accept: 'application/vnd.github+json',
     'Content-Type': 'application/json',
     'X-GitHub-Api-Version': '2022-11-28',
@@ -28,7 +27,7 @@ export async function fetchFile(path) {
   return { data: JSON.parse(content), sha: data.sha }
 }
 
-export async function saveFile(path, content, sha, message) {
+export async function saveFile(path, content, sha, token, message) {
   const json = JSON.stringify(content, null, 2)
   const bytes = new TextEncoder().encode(json)
   const b64 = btoa(String.fromCharCode(...bytes))
@@ -38,7 +37,7 @@ export async function saveFile(path, content, sha, message) {
 
   const res = await fetch(
     `${BASE_URL}/repos/${OWNER}/${REPO}/contents/${path}`,
-    { method: 'PUT', headers: getWriteHeaders(), body: JSON.stringify(body) }
+    { method: 'PUT', headers: getWriteHeaders(token), body: JSON.stringify(body) }
   )
   if (!res.ok) {
     const err = await res.json()
@@ -46,4 +45,17 @@ export async function saveFile(path, content, sha, message) {
   }
   const result = await res.json()
   return result.content.sha
+}
+
+export async function verifyWriteToken(token) {
+  try {
+    const res = await fetch(`${BASE_URL}/repos/${OWNER}/${REPO}`, {
+      headers: getWriteHeaders(token),
+    })
+    if (!res.ok) return false
+    const data = await res.json()
+    return data.permissions?.push === true
+  } catch {
+    return false
+  }
 }

@@ -7,7 +7,7 @@ import settings from '../../data/settings.json'
 const YEARS = [2025, 2026, 2027]
 
 export default function FinancialStatement() {
-  const { canEdit } = useAuth()
+  const { canEdit, requireToken } = useAuth()
   const [year, setYear] = useState(2026)
   const [bs, setBs] = useState(null)
   const [bsSha, setBsSha] = useState(null)
@@ -199,6 +199,7 @@ function OverviewTab({ year, bs, monthlyData, totalAssets, totalLiabilities, tot
 }
 
 function EditBalanceSheet({ year, bs, bsSha, canEdit, onSaved }) {
+  const { requireToken } = useAuth()
   const [draft, setDraft] = useState(() => initDraft(bs))
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -224,11 +225,14 @@ function EditBalanceSheet({ year, bs, bsSha, canEdit, onSaved }) {
   async function handleSave() {
     setSaving(true)
     try {
+      const token = await requireToken()
       const updated = { year, assets: draft.assets.filter(a => a.amount > 0 || a.note), liabilities: draft.liabilities.filter(l => l.amount > 0 || l.note) }
-      const newSha = await saveFile(`data/${year}/balance-sheet.json`, updated, bsSha, `Update ${year} balance sheet`)
+      const newSha = await saveFile(`data/${year}/balance-sheet.json`, updated, bsSha, token, `Update ${year} balance sheet`)
       onSaved(updated, newSha)
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
+    } catch {
+      // cancelled
     } finally {
       setSaving(false)
     }
