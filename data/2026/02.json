@@ -1,0 +1,158 @@
+{
+  "year": 2026,
+  "month": 2,
+  "incomes": [
+    {
+      "id": "1",
+      "categoryId": "salary_yj",
+      "amount": 3270000,
+      "note": "세후급여"
+    },
+    {
+      "id": "2",
+      "categoryId": "salary_sm",
+      "amount": 3111930,
+      "note": "세후급여"
+    },
+    {
+      "id": "3",
+      "categoryId": "bonus_sm",
+      "amount": 3497142,
+      "note": "성과급"
+    },
+    {
+      "id": "4",
+      "categoryId": "tax_refund_sm",
+      "amount": 515200,
+      "note": "연말정산 환급"
+    },
+    {
+      "id": "5",
+      "categoryId": "other_sm",
+      "amount": 100000,
+      "note": "기타수입"
+    },
+    {
+      "id": "6",
+      "categoryId": "tax_refund_yj",
+      "amount": 367150,
+      "note": "연말정산 용주"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1",
+      "categoryId": "allowance",
+      "amount": 800000,
+      "note": "성미, 용주 용돈"
+    },
+    {
+      "id": "2",
+      "categoryId": "fixed_telecom",
+      "amount": 97110,
+      "note": "용주 핸드폰요금"
+    },
+    {
+      "id": "3",
+      "categoryId": "fixed_insurance",
+      "amount": 34020,
+      "note": "용주 우체국실비보험"
+    },
+    {
+      "id": "4",
+      "categoryId": "fixed_other",
+      "amount": 50000,
+      "note": "성미 가족 회비"
+    },
+    {
+      "id": "5",
+      "categoryId": "fixed_telecom",
+      "amount": 143720,
+      "note": "성미 핸드폰, LG 인터넷, LG TV"
+    },
+    {
+      "id": "6",
+      "categoryId": "other",
+      "amount": 5000,
+      "note": "거치대 폐기물 비용"
+    },
+    {
+      "id": "7",
+      "categoryId": "other",
+      "amount": 180000,
+      "note": "온누리충전"
+    },
+    {
+      "id": "8",
+      "categoryId": "food",
+      "amount": 73700,
+      "note": "설날 소갈비찜"
+    },
+    {
+      "id": "9",
+      "categoryId": "maintenance",
+      "amount": 271860,
+      "note": "가스비"
+    },
+    {
+      "id": "10",
+      "categoryId": "transport",
+      "amount": 55000,
+      "note": "성미 기후동행카드"
+    },
+    {
+      "id": "11",
+      "categoryId": "family",
+      "amount": 50000,
+      "note": "산은 이승호 전부장 조의금"
+    },
+    {
+      "id": "12",
+      "categoryId": "maintenance",
+      "amount": 29650,
+      "note": "전기비"
+    },
+    {
+      "id": "13",
+      "categoryId": "other",
+      "amount": 1000000,
+      "note": "설날 용돈"
+    },
+    {
+      "id": "14",
+      "categoryId": "maintenance",
+      "amount": 5000,
+      "note": "KBS 수신료"
+    },
+    {
+      "id": "15",
+      "categoryId": "other",
+      "amount": 827370,
+      "note": "2월 카드값"
+    },
+    {
+      "id": "16",
+      "categoryId": "fixed_insurance",
+      "amount": 57382,
+      "note": "성미 보험비"
+    },
+    {
+      "id": "17",
+      "categoryId": "other",
+      "amount": 29000,
+      "note": "ChatGPT 결제"
+    },
+    {
+      "id": "18",
+      "categoryId": "rent",
+      "amount": 200000,
+      "note": "2월 월세"
+    },
+    {
+      "id": "19",
+      "categoryId": "other",
+      "amount": 10000,
+      "note": "아버님 환갑 뷔페 예약금"
+    }
+  ]
+}

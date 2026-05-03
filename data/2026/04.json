@@ -1,0 +1,140 @@
+{
+  "year": 2026,
+  "month": 4,
+  "incomes": [
+    {
+      "id": "1",
+      "categoryId": "salary_yj",
+      "amount": 2840000,
+      "note": "세후급여"
+    },
+    {
+      "id": "2",
+      "categoryId": "salary_sm",
+      "amount": 2399360,
+      "note": "세후급여"
+    },
+    {
+      "id": "3",
+      "categoryId": "tutoring_sm",
+      "amount": 1600000,
+      "note": "과외 세후급여"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1",
+      "categoryId": "allowance",
+      "amount": 800000,
+      "note": "성미, 용주 용돈"
+    },
+    {
+      "id": "2",
+      "categoryId": "fixed_telecom",
+      "amount": 97110,
+      "note": "용주 핸드폰요금"
+    },
+    {
+      "id": "3",
+      "categoryId": "fixed_insurance",
+      "amount": 34020,
+      "note": "용주 우체국실비보험"
+    },
+    {
+      "id": "4",
+      "categoryId": "fixed_other",
+      "amount": 50000,
+      "note": "성미 가족 회비"
+    },
+    {
+      "id": "5",
+      "categoryId": "fixed_telecom",
+      "amount": 136020,
+      "note": "성미 핸드폰, LG 인터넷, LG TV"
+    },
+    {
+      "id": "6",
+      "categoryId": "other",
+      "amount": 61000,
+      "note": "가족사진 인쇄"
+    },
+    {
+      "id": "7",
+      "categoryId": "transport",
+      "amount": 55000,
+      "note": "기후동행카드 충전"
+    },
+    {
+      "id": "8",
+      "categoryId": "other",
+      "amount": 10000,
+      "note": "가스누수공사 비용"
+    },
+    {
+      "id": "9",
+      "categoryId": "maintenance",
+      "amount": 147610,
+      "note": "가스비"
+    },
+    {
+      "id": "10",
+      "categoryId": "family",
+      "amount": 100000,
+      "note": "조의금 동기 황수지"
+    },
+    {
+      "id": "11",
+      "categoryId": "maintenance",
+      "amount": 26020,
+      "note": "전기요금"
+    },
+    {
+      "id": "12",
+      "categoryId": "family",
+      "amount": 100000,
+      "note": "축의금 후임 박주영"
+    },
+    {
+      "id": "13",
+      "categoryId": "other",
+      "amount": 179000,
+      "note": "성미 머리"
+    },
+    {
+      "id": "14",
+      "categoryId": "food",
+      "amount": 31900,
+      "note": "알가자미 구매"
+    },
+    {
+      "id": "15",
+      "categoryId": "fixed_insurance",
+      "amount": 61909,
+      "note": "성미 보험료"
+    },
+    {
+      "id": "16",
+      "categoryId": "allowance",
+      "amount": 80000,
+      "note": "성미 용돈 추가"
+    },
+    {
+      "id": "17",
+      "categoryId": "dining_out",
+      "amount": 50000,
+      "note": "성미 회식"
+    },
+    {
+      "id": "18",
+      "categoryId": "other",
+      "amount": 1257325,
+      "note": "카드값"
+    },
+    {
+      "id": "19",
+      "categoryId": "rent",
+      "amount": 200000,
+      "note": "월세"
+    }
+  ]
+}

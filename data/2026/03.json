@@ -1,0 +1,152 @@
+{
+  "year": 2026,
+  "month": 3,
+  "incomes": [
+    {
+      "id": "1",
+      "categoryId": "salary_yj",
+      "amount": 2480000,
+      "note": "세후급여"
+    },
+    {
+      "id": "2",
+      "categoryId": "bonus_yj",
+      "amount": 5638492,
+      "note": "성과급"
+    },
+    {
+      "id": "3",
+      "categoryId": "salary_sm",
+      "amount": 2348450,
+      "note": "세후급여"
+    },
+    {
+      "id": "4",
+      "categoryId": "tutoring_sm",
+      "amount": 1600000,
+      "note": "과외 세후급여"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1",
+      "categoryId": "allowance",
+      "amount": 800000,
+      "note": "성미, 용주 용돈"
+    },
+    {
+      "id": "2",
+      "categoryId": "fixed_telecom",
+      "amount": 97110,
+      "note": "용주 핸드폰요금"
+    },
+    {
+      "id": "3",
+      "categoryId": "fixed_insurance",
+      "amount": 34020,
+      "note": "용주 우체국실비보험"
+    },
+    {
+      "id": "4",
+      "categoryId": "fixed_other",
+      "amount": 50000,
+      "note": "성미 가족 회비"
+    },
+    {
+      "id": "5",
+      "categoryId": "fixed_telecom",
+      "amount": 136020,
+      "note": "성미 핸드폰, LG 인터넷, LG TV"
+    },
+    {
+      "id": "6",
+      "categoryId": "other",
+      "amount": 275000,
+      "note": "세무사비용"
+    },
+    {
+      "id": "7",
+      "categoryId": "medical",
+      "amount": 250000,
+      "note": "아빠건강검진 차병원"
+    },
+    {
+      "id": "8",
+      "categoryId": "food",
+      "amount": 330000,
+      "note": "위장전입 고시원"
+    },
+    {
+      "id": "9",
+      "categoryId": "family",
+      "amount": 100000,
+      "note": "곽인 산은 부친상"
+    },
+    {
+      "id": "10",
+      "categoryId": "transport",
+      "amount": 55000,
+      "note": "성미 기후동행카드"
+    },
+    {
+      "id": "11",
+      "categoryId": "maintenance",
+      "amount": 214050,
+      "note": "도시가스세"
+    },
+    {
+      "id": "12",
+      "categoryId": "maintenance",
+      "amount": 25570,
+      "note": "전기세"
+    },
+    {
+      "id": "13",
+      "categoryId": "other",
+      "amount": 58000,
+      "note": "숨고 결제"
+    },
+    {
+      "id": "14",
+      "categoryId": "dining_out",
+      "amount": 20000,
+      "note": "육회"
+    },
+    {
+      "id": "15",
+      "categoryId": "fixed_insurance",
+      "amount": 61909,
+      "note": "성미 보험료"
+    },
+    {
+      "id": "16",
+      "categoryId": "maintenance",
+      "amount": 36350,
+      "note": "수도세"
+    },
+    {
+      "id": "17",
+      "categoryId": "other",
+      "amount": 29000,
+      "note": "ChatGPT 결제"
+    },
+    {
+      "id": "18",
+      "categoryId": "other",
+      "amount": 1984584,
+      "note": "신용카드대금"
+    },
+    {
+      "id": "19",
+      "categoryId": "other",
+      "amount": 58000,
+      "note": "숨고"
+    },
+    {
+      "id": "20",
+      "categoryId": "other",
+      "amount": 240000,
+      "note": "용주 옷"
+    }
+  ]
+}

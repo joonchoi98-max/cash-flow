@@ -1,0 +1,37 @@
+{
+  "year": 2026,
+  "month": 5,
+  "incomes": [],
+  "expenses": [
+    {
+      "id": "1",
+      "categoryId": "allowance",
+      "amount": 800000,
+      "note": "성미, 용주 용돈"
+    },
+    {
+      "id": "2",
+      "categoryId": "fixed_telecom",
+      "amount": 97110,
+      "note": "용주 핸드폰요금"
+    },
+    {
+      "id": "3",
+      "categoryId": "fixed_insurance",
+      "amount": 34020,
+      "note": "용주 우체국실비보험"
+    },
+    {
+      "id": "4",
+      "categoryId": "fixed_other",
+      "amount": 50000,
+      "note": "성미 가족 회비"
+    },
+    {
+      "id": "5",
+      "categoryId": "fixed_telecom",
+      "amount": 136020,
+      "note": "성미 핸드폰, LG 인터넷, LG TV"
+    }
+  ]
+}
